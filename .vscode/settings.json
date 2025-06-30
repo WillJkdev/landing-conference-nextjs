@@ -1,0 +1,53 @@
+{
+    "files.associations": {
+        "*.css": "tailwindcss"
+    },
+    "editor.quickSuggestions": {
+    "strings": "on"
+  },
+  "cSpell.customDictionaries": {
+    "custom-dictionary-workspace": {
+      "name": "custom-dictionary-workspace",
+      "path": "${workspaceFolder:prisma-crud}/.cspell/custom-dictionary-workspace.txt",
+      "addWords": true,
+      "scope": "workspace"
+    }
+  },
+  "cSpell.words": [
+    "autoincrement",
+    "checkin",
+    "cloudinary",
+    "correctamente",
+    "creado",
+    "crear",
+    "cuid",
+    "datasource",
+    "ejecutado",
+    "ejecutados",
+    "Ejecutando",
+    "ejecutar",
+    "encontrado",
+    "existente",
+    "expira",
+    "expiración",
+    "expiró",
+    "geist",
+    "mercadopago",
+    "Monitoreo",
+    "nextauth",
+    "NEXTAUTH",
+    "notif",
+    "openssl",
+    "paginación",
+    "Pago",
+    "papaparse",
+    "postgresql",
+    "Reintentar",
+    "sonner",
+    "sqlite",
+    "svix",
+    "uncollectible",
+    "unparse",
+    "Usuario"
+  ]
+}

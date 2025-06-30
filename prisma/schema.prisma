@@ -1,0 +1,129 @@
+generator client {
+  provider = "prisma-client-js"
+  output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id        String   @id @default(cuid())
+  name      String
+  email     String   @unique
+  phone     String
+  createdAt DateTime @default(now())
+  Ticket    Ticket?
+}
+
+model Ticket {
+  id                  Int          @id @default(autoincrement())
+  userId              String       @unique
+  paid                Boolean      @default(false)
+  checkedIn           Boolean      @default(false)
+  checkedInAt         DateTime?
+  paymentMethod       String?
+  paymentId           String?
+  paymentPreferenceId String?
+  initPoint           String?
+  paymentGateway      String?
+  paymentStatus       String?
+  amount              Int?
+  fees                Float?
+  netAmount           Float?
+  installments        Int?
+  createdAt           DateTime     @default(now())
+  paidAt              DateTime?
+  paymentEmailSent    Boolean      @default(false) // 🟡 correo con enlace de pago
+  ticketEmailSent     Boolean      @default(false) // 🟢 correo con ticket y QR
+  emailEvents         EmailEvent[]
+  user                User         @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model Admin {
+  id        String   @id @default(cuid())
+  name      String
+  email     String   @unique
+  password  String
+  role      String   @default("admin") // "admin", "staff", etc.
+  isActive  Boolean  @default(true)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model EmailEvent {
+  id            String    @id @default(cuid())
+  emailId       String    @unique
+  to            String
+  subject       String
+  type          String
+  ticketId      Int?
+  status        String
+  sentDate      DateTime?
+  deliveredDate DateTime?
+  timestamp     DateTime  @default(now())
+  ticket        Ticket?   @relation(fields: [ticketId], references: [id], onDelete: Cascade)
+
+  @@index([emailId])
+}
+
+model EventSettings {
+  id           String   @id @default(cuid())
+  name         String
+  date         DateTime
+  time         String
+  location     String
+  description  String?
+  maxAttendees Int
+  ticketPrice  Float
+  currency     String   @default("USD")
+  logoUrl      String?
+  durationDays Int      @default(1)
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+}
+
+model UrlSettings {
+  id              String   @id @default(cuid())
+  confirmationUrl String
+  presentationUrl String
+  websiteUrl      String
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+}
+
+model EmailSettings {
+  id              String   @id @default(cuid())
+  senderName      String
+  senderEmail     String
+  replyToEmail    String
+  enableReminders Boolean  @default(true)
+  reminderDays    Int      @default(1)
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+}
+
+model SecuritySettings {
+  id                       String   @id @default(cuid())
+  requireEmailVerification Boolean  @default(true)
+  enableTwoFactor          Boolean  @default(false)
+  sessionTimeout           Int      @default(24) // en horas
+  createdAt                DateTime @default(now())
+  updatedAt                DateTime @updatedAt
+}
+
+model ApiKey {
+  id         String    @id @default(cuid())
+  name       String
+  key        String    @unique
+  type       String // "api", "qr_token", etc.
+  isActive   Boolean   @default(true)
+  expiresAt  DateTime?
+  lastUsedAt DateTime?
+  createdAt  DateTime  @default(now())
+  updatedAt  DateTime  @updatedAt
+
+  @@index([key])
+  @@index([type])
+}
